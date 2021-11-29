@@ -1,0 +1,407 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.css' type='text/css' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.0/mapbox-gl-draw.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.0/mapbox-gl-draw.css' type='text/css' />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            height: 70%
+        }
+    </style>
+    <title>Store Locator</title>
+</head>
+
+<body>
+    <div class="container my-3">
+        <h1 class="display-4 text-center"><i class="fas fa-map-marked mr-4"></i>Store Locator</h1>
+        <a href="add.html" class="btn btn-success mb-4">Add Store</a>
+        <h1>Welcome <span id="user-email"></span></h1>
+        <a class="btn btn-danger" onclick='logout()'>Logout</a>
+    </div>
+    <div id="map" style="width: 100%; height: 500px; border-radius: 5px;">
+
+    </div>
+
+    <script src="js/map.js"></script>
+    <script>
+        window.onload = function() {
+            const user = JSON.parse(localStorage.getItem('user'))
+            const token = user.token;
+            const base64Url = token.split('.')[1];
+            const decodedValue = JSON.parse(window.atob(base64Url));
+            console.log(user);
+            console.log(decodedValue);
+
+            document.getElementById('user-email').innerText = decodedValue.email;
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = " ./login.html "
+        }
+    </script>
+</body>
+
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <title>Get driving directions from one location to another</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.css' type='text/css' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.0/mapbox-gl-draw.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.0/mapbox-gl-draw.css' type='text/css' />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #map {
+            position: absolute;
+            top: 203px;
+            bottom: 0;
+            width: 100%;
+            height: 67%;
+        }
+    </style>
+</head>
+
+<body onload="checklogin();">
+
+    <style>
+        .geocoder {
+            height: 379px;
+            width: 275px;
+            position: absolute;
+            top: 199px;
+            left: 10px;
+            background-color: rgba(255, 255, 255, .9);
+            padding: 15px;
+            text-align: left;
+            font-family: 'Arial';
+            margin: 0;
+            font-size: 13px;
+        }
+        
+        #instructions {
+            position: absolute;
+            height: 379px;
+            margin: 19px;
+            width: 20%;
+            top: 193px;
+            bottom: 0;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            overflow-y: scroll;
+            font-family: sans-serif;
+        }
+        
+        .logout {
+            margin-bottom: 24px;
+        }
+        
+        .welcome-text {
+            margin-bottom: .5rem;
+        }
+        
+        .my-3 {
+            margin-top: 0rem;
+        }
+    </style>
+
+    <div class="container my-3">
+        <h1 class="display-4 text-center"><i class="fas fa-map-marked mr-4"></i>Store Locator</h1><a class="btn btn-danger logout" onclick='logout()'>Logout</a>
+        <a href="add.html" class="btn btn-success mb-4">Add Store</a>
+        <h1 class="welcome-text">Welcome <span id="user-email"></span></h1>
+    </div>
+    <!--  the map -->
+    <div id='map'></div>
+    <!-- geocoder search input -->
+    <div class="geocoder">
+        <div id="geocoder"></div>
+    </div>
+    <!-- left side instructions -->
+    <div id='instructions'>
+        <div id="calculated-line"></div>
+    </div>
+
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZ2FsdmF0cm9uMTk5OCIsImEiOiJja3JmNjAxNXY1dG5lMm5sM3dyYzZlcWpzIn0._egYG2ixF7sJ0KqXa3yROw';
+        var instructions = document.getElementById('instructions');
+        var map = new mapboxgl.Map({
+            container: 'map', // container id
+            style: 'mapbox://styles/mapbox/streets-v9', //hosted style id
+            center: [72.8254507, 19.0215011], // starting position
+            zoom: 9, // starting zoom
+            minZoom: 11 // keep it local
+        });
+        //  geocoder here
+        var geocoder = new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            // limit results to Australia
+            //country: 'IN',
+        });
+
+        // After the map style has loaded on the page, add a source layer and default
+        // styling for a single point.
+        map.on('load', function() {
+            // Listen for the `result` event from the MapboxGeocoder that is triggered when a user
+            // makes a selection and add a symbol that matches the result.
+            geocoder.on('result', function(ev) {
+                console.log(ev.result.center);
+
+            });
+        });
+        var draw = new MapboxDraw({
+            displayControlsDefault: false,
+            controls: {
+                line_string: true,
+                trash: true
+            },
+            styles: [
+                // ACTIVE (being drawn)
+                // line stroke
+                {
+                    "id": "gl-draw-line",
+                    "type": "line",
+                    "filter": ["all", ["==", "$type", "LineString"],
+                        ["!=", "mode", "static"]
+                    ],
+                    "layout": {
+                        "line-cap": "round",
+                        "line-join": "round"
+                    },
+                    "paint": {
+                        "line-color": "#3b9ddd",
+                        "line-dasharray": [0.2, 2],
+                        "line-width": 4,
+                        "line-opacity": 0.7
+                    }
+                },
+                // vertex point halos
+                {
+                    "id": "gl-draw-polygon-and-line-vertex-halo-active",
+                    "type": "circle",
+                    "filter": ["all", ["==", "meta", "vertex"],
+                        ["==", "$type", "Point"],
+                        ["!=", "mode", "static"]
+                    ],
+                    "paint": {
+                        "circle-radius": 10,
+                        "circle-color": "#FFF"
+                    }
+                },
+                // vertex points
+                {
+                    "id": "gl-draw-polygon-and-line-vertex-active",
+                    "type": "circle",
+                    "filter": ["all", ["==", "meta", "vertex"],
+                        ["==", "$type", "Point"],
+                        ["!=", "mode", "static"]
+                    ],
+                    "paint": {
+                        "circle-radius": 6,
+                        "circle-color": "#3b9ddd",
+                    }
+                },
+            ]
+        });
+        // add the draw tool to the map
+        map.addControl(draw);
+
+        // add create, update, or delete actions
+        map.on('draw.create', updateRoute);
+        map.on('draw.update', updateRoute);
+        map.on('draw.delete', removeRoute);
+
+        // use the coordinates you just drew to make your directions request
+        function updateRoute() {
+            removeRoute(); // overwrite any existing layers
+            var data = draw.getAll();
+            var lastFeature = data.features.length - 1;
+            var coords = data.features[lastFeature].geometry.coordinates;
+            var newCoords = coords.join(';');
+            getMatch(newCoords);
+        }
+
+        // make a directions request
+        function getMatch(e) {
+            var url = 'https://api.mapbox.com/directions/v5/mapbox/cycling/' + e +
+                '?geometries=geojson&steps=true&access_token=' + mapboxgl.accessToken;
+            var req = new XMLHttpRequest();
+            req.responseType = 'json';
+            req.open('GET', url, true);
+            req.onload = function() {
+                var jsonResponse = req.response;
+                var distance = jsonResponse.routes[0].distance * 0.001;
+                var duration = jsonResponse.routes[0].duration / 60;
+                var steps = jsonResponse.routes[0].legs[0].steps;
+                var coords = jsonResponse.routes[0].geometry;
+                //  console.log(steps);
+                console.log(coords);
+                //  console.log(distance);
+                // console.log(duration);
+
+                // get route directions on load map
+                steps.forEach(function(step) {
+                    instructions.insertAdjacentHTML('beforeend', '<p>' + step.maneuver.instruction + '</p>');
+                });
+                // get distance and duration
+                instructions.insertAdjacentHTML('beforeend', '<p>' + 'Distance: ' + distance.toFixed(2) + ' km<br>Duration: ' + duration.toFixed(2) + ' minutes' + '</p>');
+
+                // add the route to the map
+                addRoute(coords);
+                //  console.log(coordinates);
+
+            };
+            req.send();
+        }
+
+        // adds the route as a layer on the map
+        function addRoute(coords) {
+            // check if the route is already loaded
+            if (map.getSource('route')) {
+                map.removeLayer('route');
+                map.removeSource('route')
+            } else {
+                map.addLayer({
+                    "id": "route",
+                    "type": "line",
+                    "source": {
+                        "type": "geojson",
+                        "data": {
+                            "type": "Feature",
+                            "properties": {},
+                            "geometry": coords
+                        }
+                    },
+                    "layout": {
+                        "line-join": "round",
+                        "line-cap": "round"
+                    },
+                    "paint": {
+                        "line-color": "#1db7dd",
+                        "line-width": 8,
+                        "line-opacity": 0.8
+                    }
+                });
+            };
+        }
+
+        // remove the layer if it exists
+        function removeRoute() {
+            if (map.getSource('route')) {
+                map.removeLayer('route');
+                map.removeSource('route');
+                instructions.innerHTML = '';
+            } else {
+                return;
+            }
+        }
+        document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+
+        const token = window.localStorage.getItem("user");
+        const user = JSON.parse(atob(token.split('.')[1]));
+        const email = user.email;
+        console.log(user);
+        console.log(email);
+        document.getElementById("user-email").innerText = email;
+
+        function checklogin() {
+            const useremail = document.getElementById('user-email').innerText;
+            if (useremail == "" || useremail == null) {
+                window.location = "/login.html";
+                console.log(useremail);
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        // window.onload = function() {
+
+
+        //         const email = user.email;
+        //         console.log(user);
+        //         console.log(email);
+        //         document.getElementById("user-email").innerText = email;
+        //         const useremail = document.getElementById('user-email').innerText;
+        //         if (email == "" || email == null) {
+        //             window.location = "/login.html";
+        //             console.log(useremail);
+        //         }
+
+
+
+        const userRole = user.role;
+        if (userRole != "customer" && userRole != "producer") {
+            alert("You are not authorised");
+            window.location = "/login.html"
+            console.log(userRole);
+        }
+        // window.onload = checkRole
+
+        function logout() {
+            window.localStorage.removeItem("user");
+            window.location = "/login.html"
+        }
+    </script>
+    <script src="js/map.js"></script>
+</body>
+
+</html>
+
+</html>
